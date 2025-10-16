@@ -2,8 +2,6 @@
 #include <fstream>
 #include <filesystem>
 
-// создание структуры проекта на python
-
 int main(int argc, char *argv[])
 {
     if (argc < 2)
@@ -57,11 +55,11 @@ int main(int argc, char *argv[])
         {
             std::filesystem::create_directories(argv[1]);
             std::filesystem::create_directories(std::string(argv[1]) + "/src");
-            std::filesystem::create_directories(std::string(argv[1]) + "/include");
+            std::filesystem::create_directories(std::string(argv[1]) + "/includes");
             std::filesystem::create_directories(std::string(argv[1]) + "/build");
             std::ofstream main_file(std::string(argv[1]) + "/src/main.cpp");
             main_file << "#include <iostream>\n\n"
-                      << "int main() {\n"
+                      << "int main() \n{\n"
                       << "    std::cout << \"Hello, World!\" << std::endl;\n"
                       << "    return 0;\n"
                       << "}\n";
