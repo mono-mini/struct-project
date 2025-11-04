@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <vector>
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,35 @@ int main(int argc, char *argv[])
     {
         std::cout << "Project Structure Creator v1.0.0\n";
         return 0;
+    }
+    else if (argc == 3 && std::string(argv[1]) == "class")
+    {
+        std::string upName;
+        for (size_t i = 0; i < std::string(argv[2]).size(); i++)
+        {
+            upName += toupper(argv[2][i]);
+        }
+        std::ofstream h_file("includes/" + std::string(argv[2]) + ".h");
+        if (!h_file.is_open())
+        {
+            std::cout << "error create .h file\n";
+            return 1;
+        }
+        h_file << "#ifndef " + upName + "_H\n"
+               << "#define " + upName + "_H\n\n"
+               << "#include <iostream>\n"
+               << "\nclass " + std::string(argv[2]) + "\n{};\n\n"
+               << "#endif " + std::string("// ") + upName + "_H\n";
+        h_file.close();
+        std::ofstream cpp_file("src/" + std::string(argv[2]) + ".cpp");
+        if (!cpp_file.is_open())
+        {
+            std::cout << "error create .cpp file\n";
+            return 1;
+        }
+        cpp_file << "#include <iostream>";
+        cpp_file.close();
+        std::cout << "class '" + std::string(argv[2]) + "' create\n";
     }
     else
     {
@@ -53,24 +83,85 @@ int main(int argc, char *argv[])
         }
         else if (std::string(argv[2]) == "c++")
         {
-            std::filesystem::create_directories(argv[1]);
-            std::filesystem::create_directories(std::string(argv[1]) + "/src");
-            std::filesystem::create_directories(std::string(argv[1]) + "/includes");
-            std::filesystem::create_directories(std::string(argv[1]) + "/build");
-            std::ofstream main_file(std::string(argv[1]) + "/src/main.cpp");
-            main_file << "#include <iostream>\n\n"
-                      << "int main() \n{\n"
-                      << "    std::cout << \"Hello, World!\" << std::endl;\n"
-                      << "    return 0;\n"
-                      << "}\n";
-            main_file.close();
-            std::ofstream readme_file(std::string(argv[1]) + "/README.md");
-            readme_file.close();
-            std::ofstream makefile(std::string(argv[1]) + "/Makefile");
-            makefile << "all:\n"
-                     << "\tg++ -o build/main src/main.cpp\n";
-            makefile.close();
-            std::cout << "Project structure for '" << argv[1] << "' created successfully.\n";
+            if (argc == 3)
+            {
+                std::filesystem::create_directories(argv[1]);
+                std::filesystem::create_directories(std::string(argv[1]) + "/src");
+                std::filesystem::create_directories(std::string(argv[1]) + "/includes");
+                std::filesystem::create_directories(std::string(argv[1]) + "/build");
+                std::ofstream main_file(std::string(argv[1]) + "/src/main.cpp");
+                main_file << "#include <iostream>\n\n"
+                          << "int main() \n{\n"
+                          << "    std::cout << \"Hello, World!\" << std::endl;\n"
+                          << "    return 0;\n"
+                          << "}\n";
+                main_file.close();
+                std::ofstream readme_file(std::string(argv[1]) + "/README.md");
+                readme_file.close();
+                std::ofstream makefile(std::string(argv[1]) + "/Makefile");
+                makefile << "all:\n"
+                         << "\tg++ -o build/main src/main.cpp\n";
+                makefile.close();
+                std::cout << "Project structure for '" << argv[1] << "' created successfully.\n";
+            }
+            if (argc > 3)
+            {
+                if (std::string(argv[3]) == "modul")
+                {
+                    std::filesystem::create_directories(argv[1]);
+                    std::filesystem::create_directories(std::string(argv[1]) + "/src");
+                    std::filesystem::create_directories(std::string(argv[1]) + "/includes");
+                    std::filesystem::create_directories(std::string(argv[1]) + "/build");
+                    std::ofstream inc_file(std::string(argv[1]) + "/includes/main.h");
+                    inc_file << "#ifndef FILE_H\n"
+                             << "#define FILE_H\n"
+                             << "#include <iostream>\n"
+                             << "#endif // FILE_H\n";
+                    inc_file.close();
+                    std::ofstream main_file(std::string(argv[1]) + "/src/main.cpp");
+                    main_file << "#include <iostream>\n"
+                              << "#include \"../includes/main.h\"\n\n"
+                              << "int main() \n{\n"
+                              << "    std::cout << \"Hello, World!\" << std::endl;\n"
+                              << "    return 0;\n"
+                              << "}\n";
+                    main_file.close();
+                    std::ofstream readme_file(std::string(argv[1]) + "/README.md");
+                    readme_file.close();
+                    std::ofstream makefile(std::string(argv[1]) + "/Makefile");
+                    makefile << "all:\n"
+                             << "\tg++ -o build/main src/main.cpp\n";
+                    makefile.close();
+                    std::ofstream project(std::string(argv[1]) + ".strprjproject.txt");
+                    project << "prog";
+                    project.close();
+                    std::cout << "Project structure for '" << argv[1] << "' created successfully.\n";
+                }
+                else if (std::string(argv[3]) == "prog")
+                {
+                    std::filesystem::create_directories(argv[1]);
+                    std::filesystem::create_directories(std::string(argv[1]) + "/src");
+                    std::filesystem::create_directories(std::string(argv[1]) + "/includes");
+                    std::filesystem::create_directories(std::string(argv[1]) + "/build");
+                    std::ofstream main_file(std::string(argv[1]) + "/src/main.cpp");
+                    main_file << "#include <iostream>\n\n"
+                              << "int main() \n{\n"
+                              << "    std::cout << \"Hello, World!\" << std::endl;\n"
+                              << "    return 0;\n"
+                              << "}\n";
+                    main_file.close();
+                    std::ofstream readme_file(std::string(argv[1]) + "/README.md");
+                    readme_file.close();
+                    std::ofstream makefile(std::string(argv[1]) + "/Makefile");
+                    makefile << "all:\n"
+                             << "\tg++ -o build/main src/main.cpp\n";
+                    makefile.close();
+                    std::ofstream project(std::string(argv[1]) + ".strprjproject.txt");
+                    project << "modul";
+                    project.close();
+                    std::cout << "Project structure for '" << argv[1] << "' created successfully.\n";
+                }
+            }
         }
         else if (std::string(argv[2]) == "java")
         {
